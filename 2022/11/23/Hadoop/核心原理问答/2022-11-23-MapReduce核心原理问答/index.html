@@ -1,0 +1,345 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>MapReduce核心原理问答 | Abstract Class</title><meta name="author" content="zhoutttao"><meta name="copyright" content="zhoutttao"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、描述一下手写MR的大概流程和规范  一个完整的MR程序，可以分为三个部分，分别是Mapper，Reducer和Driver。  编写Mapper类的流程如下：   声明一个自定义Mapper类并继承Hadoop提供的Mapper 确定四大泛型 输入数据的K是当前一组待处理数据的偏移量，一般是LongWritable 输入数据的V是当前待处理的数据 输出数据的K和V   重写父类中的map方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MapReduce核心原理问答">
+<meta property="og:url" content="http://zhoutttao.com/2022/11/23/Hadoop/%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E9%97%AE%E7%AD%94/2022-11-23-MapReduce%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E9%97%AE%E7%AD%94/index.html">
+<meta property="og:site_name" content="Abstract Class">
+<meta property="og:description" content="一、描述一下手写MR的大概流程和规范  一个完整的MR程序，可以分为三个部分，分别是Mapper，Reducer和Driver。  编写Mapper类的流程如下：   声明一个自定义Mapper类并继承Hadoop提供的Mapper 确定四大泛型 输入数据的K是当前一组待处理数据的偏移量，一般是LongWritable 输入数据的V是当前待处理的数据 输出数据的K和V   重写父类中的map方法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg">
+<meta property="article:published_time" content="2022-11-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-12-17T13:20:52.004Z">
+<meta property="article:author" content="zhoutttao">
+<meta property="article:tag" content="博客">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://zhoutttao.com/2022/11/23/Hadoop/%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E9%97%AE%E7%AD%94/2022-11-23-MapReduce%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E9%97%AE%E7%AD%94/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":50},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'MapReduce核心原理问答',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2022-12-17 21:20:52'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Abstract Class</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">MapReduce核心原理问答</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-11-22T16:00:00.000Z" title="发表于 2022-11-23 00:00:00">2022-11-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-12-17T13:20:52.004Z" title="更新于 2022-12-17 21:20:52">2022-12-17</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="MapReduce核心原理问答"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p><strong>一、描述一下手写MR的大概流程和规范</strong></p>
+</blockquote>
+<p>一个完整的MR程序，可以分为三个部分，分别是Mapper，Reducer和Driver。</p>
+<ul>
+<li>编写Mapper类的流程如下：</li>
+</ul>
+<ol>
+<li>声明一个自定义Mapper类并继承Hadoop提供的Mapper</li>
+<li>确定四大泛型<ul>
+<li>输入数据的K是当前一组待处理数据的偏移量，一般是LongWritable</li>
+<li>输入数据的V是当前待处理的数据</li>
+<li>输出数据的K和V</li>
+</ul>
+</li>
+<li>重写父类中的map方法，并在此方法中编写业务逻辑</li>
+<li>调用上下文对象context的方法提交</li>
+<li>注意：map()方法对每一组&lt;K, V&gt;调用一次</li>
+</ol>
+<ul>
+<li>编写Reducer类的流程如下：</li>
+</ul>
+<ol>
+<li>声明一个自定义Reducer类，继承Hadoop提供的Reducer</li>
+<li>确定四大泛型<ul>
+<li>输入数据的K和V，不用考虑，就是Mapper端的输出的K和V</li>
+<li>输出数据的K和V</li>
+</ul>
+</li>
+<li>重写父类中的map()方法，在次方法中实现业务逻辑</li>
+<li>调用上下文对象context的方法提交</li>
+<li>每一组相同K的&lt;K, V&gt;组调用一次map()方法</li>
+</ol>
+<ul>
+<li>编写Driver类的流程如下</li>
+</ul>
+<ol>
+<li>生成conf配置对象，并获取job对象</li>
+<li>指定job对象的相关参数<ul>
+<li>指定Mapper和Reducer的类</li>
+<li>指定Mapper阶段输出的K和V对象的类</li>
+<li>指定Reducer阶段输出的K和V对象的类</li>
+</ul>
+</li>
+<li>指定输入输出路径</li>
+<li>提交job</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Driver</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException, InterruptedException &#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 1 获取配置信息以及获取job对象</span></span><br><span class="line">		<span class="type">Configuration</span> <span class="variable">conf</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Configuration</span>();</span><br><span class="line">		<span class="type">Job</span> <span class="variable">job</span> <span class="operator">=</span> Job.getInstance(conf);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 2 关联本Driver程序的jar,本地测试可以不写</span></span><br><span class="line">		job.setJarByClass(XXXDriver.class);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 3 关联Mapper和Reducer的jar</span></span><br><span class="line">		job.setMapperClass(XXXMapper.class);</span><br><span class="line">		job.setReducerClass(XXXReducer.class);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 4 设置Mapper输出的kv类型</span></span><br><span class="line">		job.setMapOutputKeyClass(XXX.class);</span><br><span class="line">		job.setMapOutputValueClass(XXX.class);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 5 设置最终输出kv类型</span></span><br><span class="line">		job.setOutputKeyClass(XXX.class);</span><br><span class="line">		job.setOutputValueClass(XXX.class);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">// 6 设置输入和输出路径</span></span><br><span class="line">		FileInputFormat.setInputPaths(job, <span class="keyword">new</span> <span class="title class_">Path</span>(args[<span class="number">0</span>]));</span><br><span class="line">		FileOutputFormat.setOutputPath(job, <span class="keyword">new</span> <span class="title class_">Path</span>(args[<span class="number">1</span>]));</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 7 提交job</span></span><br><span class="line">		<span class="type">boolean</span> <span class="variable">result</span> <span class="operator">=</span> job.waitForCompletion(<span class="literal">true</span>);</span><br><span class="line">		System.exit(result ? <span class="number">0</span> : <span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+<blockquote>
+<p><strong>二、如何实现Hadoop中的序列化，以及Hadoop的序列化和Java的序列化有什么区别？</strong></p>
+</blockquote>
+<p>序列化步骤如下：</p>
+<ol>
+<li>需要实现的Bean对象需要实现Writable接口</li>
+<li>提供无参构造器</li>
+<li>重写序列化方法 write() 如：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">write</span><span class="params">(DataOutput out)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">	out.writeLong(upFlow);</span><br><span class="line">	out.writeLong(downFlow);</span><br><span class="line">	out.writeLong(sumFlow);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>重写反序列化方法 readFields()，注意<strong>反序列化的顺序要和序列化的顺序一致</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">readFields</span><span class="params">(DataInput in)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">	upFlow = in.readLong();</span><br><span class="line">	downFlow = in.readLong();</span><br><span class="line">	sumFlow = in.readLong();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>重写toString()方法（方便控制对象的输出结果）</li>
+</ol>
+<p>Java中的序列化（Serializable）太过于重量级，序列化的对象会附带许多额外的信息，这对于大数据来说是一笔很大的且不必要的开销，不便于网络传输，因此Hadoop自己开发了一套序列化机制（writable）</p>
+<blockquote>
+<p><strong>三、概述一下MR程序的执行流程</strong></p>
+</blockquote>
+<p><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221124141123.png" alt="image-20221124141121927"></p>
+<p>MR整体流程大体如下：首先是Input阶段，此时通过InputFormat组件进行切片，读取数据，规划M并进行分区和快速排序，下面就是shuffle阶段。在环形缓冲区到达一定容量后，开始溢写到磁盘，T数量，然后进行Mapper阶段，将读取的数据在map方法中进行业务处理，将处理好的每一组KV写入环形缓冲区，此阶段可选操作有combiner和压缩，n次溢写后还会有一次归并，并最终落盘。结束后作为输入等待Reducer阶段拉取，Reducer拉取到数据后先进行缓存并进行一次归并排序，按照相同的K进行分组，按每一组进入reduce方法执行业务逻辑，最后由OutputFormat组件进行输出</p>
+<blockquote>
+<p><strong>四、InputFormat负责数据写的时候要进行切片，问什么切片大小默认是128M</strong></p>
+</blockquote>
+<p>因为HDFS保存数据的默认切块大小就是128M，假如切片大小不是128M，会造成不必要的跨节点读取数据，降低效率</p>
+<blockquote>
+<p><strong>五、描述一下切片的逻辑（从源码角度描述）</strong></p>
+</blockquote>
+<p>切片的源码是FileInputFormat的getSplit()方法，该方法主要的逻辑如下：</p>
+<ol>
+<li>按照输入路径获取要处理的文件，检验我们的目标文件夹是否要忽略子目录，默认情况下不忽略</li>
+<li>判断当前文件是否能够切分，主要针对一些压缩文件，如果该文件不支持切分，就会将该文件分配给一个切片处理</li>
+<li>计算切片的大小，默认情况下切片的大小等于切块的大小，如果想要调大切片的大小，可以调小minSize，调小切片大小可以调大maxSize</li>
+<li>继续判断剩余的文件大小是否要继续切分，如果剩余大小&#x2F;切片大小&gt;1.1 就会继续切分。这样做是为了避免切出非常小的切片，使得一个MT处理的数据量非常小</li>
+</ol>
+<blockquote>
+<p><strong>六、CombineTextInputFormat机制是怎么实现的</strong></p>
+</blockquote>
+<p>CombineTextInputFormat主要用于多个小文件的处理场景，其过程包括虚拟存储和切片两个部分</p>
+<ul>
+<li>虚拟存储过程：</li>
+</ul>
+<p>将输入目录下的所有文件，依次和setMaxInputSplitSize（默认为4M）比较。如果没有大于设置的最大值，逻辑上切分为一个快。如果</p>
+<p>大于设置的最大值且大于两倍的最大值，则以最大值切割一块。如果超过最大值但是不超过最大值的两倍，此时该文件会被均分为2个块。</p>
+<ul>
+<li>切片过程：</li>
+</ul>
+<p>判断虚拟存储文件是否大于setMaxInputSplitSize值，大于则单独一个切片，如果小于该值则会跟下一个虚拟存储文件合并，共同形成一个切片</p>
+<p>​	</p>
+<blockquote>
+<p><strong>七、阐述一下 Shuffle机制 流程？</strong></p>
+</blockquote>
+<p><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221124154838.png" alt="image-20221124154833430"></p>
+<p>首先，经过Mapper阶段输出的KV对先写入到环形缓冲区，环形缓冲区到达一定容量（80%）就会将反向，并把数据进行分区、快速排序操作，然后写入到磁盘中（根据需求可以选用Combiner进行合并处理&lt;K1, V1&gt;&lt;K1, V2&gt;…&#x3D;&#x3D;&gt;&lt;K1, V1, V2…&gt;）。可能会有多次溢写发生，之后会对溢写的数据进行归并排序，合并成一个大文件（根据需求可以选用压缩操作，减小磁盘和IO消耗）最后落盘。</p>
+<p>Reducer端，每个Reduce按照分区号去拉取对应的数据到自己的内存缓冲区，缓冲区不够则溢写到磁盘，最终将所有的数据进行一次归并排序，然后按照相同的key值分组执行Reduce方法</p>
+<blockquote>
+<p><strong>八、在MR程序中由谁来决定分区的数量，哪个阶段环节会开始往分区中写数据？</strong></p>
+</blockquote>
+<p>分区由需求来决定，MR程序中实际控制分区数量是ReduceTask的数量</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">job.setNumReduceTasks(<span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+
+<p>shuffle的溢写阶段会开始往分区中写入数据</p>
+<blockquote>
+<p><strong>九、阐述MR中实现分区的思路（从源码角度分析）</strong></p>
+</blockquote>
+<p>分布数量由ReduceTask的数量决定，因此首先要获取ReduceTask数量，若其数量大于1，则说明有分区，就得按照具体的分区规则来实现，首先判断有没有自定义的分区器，若没有默认是使用HashPartitioner，它使用key的hashcode值和ReduceTask的数量取余得出分区编号</p>
+<blockquote>
+<p><strong>十、描述一下Hadoop中实现排序比较的规则</strong></p>
+</blockquote>
+<p>MapTask和ReduceTask均会对数据按照key进行排序，不管逻辑上是否需要排序，Hadoop均会进行排序操作，默认的排序是按照字典进行排序，且实现的排序方法是快速排序。</p>
+<p>整个MR阶段一共会产生三次排序，第一次是在环形缓冲区达到一定使用率后，会进行一次快速排序，然后溢写数据到磁盘。第二次则是在其之后，所有的数据处理完毕后，会对磁盘上的所有文件进行一次归并排序。第三次则是在Reduce阶段，当Reduce需要的文件全部缓存完毕后，会统一对所有的数据进行一次归并排序。</p>
+<blockquote>
+<p><strong>十一、Hadoop中实现排序的两种方案分别是什么？</strong></p>
+</blockquote>
+<ul>
+<li><p>方案一：</p>
+<p>直接让需要参与比较的对象实现WritableComparable接口，然后重写compareTo()方法，在方法中实现比较的规则。此方案由Hadoop框架帮忙获取比较器对象</p>
+</li>
+<li><p>方案二：</p>
+<p>自定义比较器类，需要此类继承Hadoop框架提供的WritableComparator，然后在此类中重写compare()方法，在方法中定义比较规则，且要在自定义的比较器中通过调用父类的super方法将比较器对象与需要参与比较的对象进行关联。最后要想比较器生效，还需要在Driver中进行指定</p>
+</li>
+</ul>
+<blockquote>
+<p><strong>十二、编写MR的时候什么情况下使用Combiner 具体实现流程是什么？</strong></p>
+</blockquote>
+<p>Combiner简单来说就是将Reduce的业务提前先执行一遍，可以减少落盘的数据量，减少IO的数据量，给后续的ReduceTask分担压力。因此当Reduce端的数据不需要考虑MapTask数据的整体性的时候，就可以使用Combiner。</p>
+<p>想要实现Combiner，首先需要自定义一个Combiner，让其继承我们的Reducer,然后在其中重写一下Reduce方法，实现提前的汇总逻辑。最后不要忘记在Driver中添加设置。</p>
+<blockquote>
+<p><strong>十三、OutputFormat自定义实现流程描述一下</strong></p>
+</blockquote>
+<ul>
+<li>首先自定义一个OutPutFormat类，需要继承Hadoop框架提供的OutPutFormat，并且在该类中创建一个自定义的</li>
+</ul>
+<p>RecordWriter并返回。</p>
+<ul>
+<li>在定义一个RecordWriter类，在其中重写writer()和close()方法，在方法中完成自定义的输出、关流。</li>
+</ul>
+<blockquote>
+<p><strong>十四、MR实现 ReduceJoin 的思路，以及ReduceJoin方案有哪些不足？</strong></p>
+</blockquote>
+<ul>
+<li><p>思路：</p>
+<p>首先我们要分析文件之间的关联，然后确定关联字段。在Map阶段，需要对多个文件的数据进行整合，让关联字段作为输出的key进行输出。在Reduce阶段只需要在每一个分组中将来源于不同文件的记录分离，最后再进行合并操作即可</p>
+</li>
+<li><p>不足：</p>
+<p>在这种方式中，合并操作是在Reduce阶段完成，Reduce端的处理压力太大，但是Map阶段的运算负载却很低，资源利用率不高，且在Reduce阶段容易产生数据倾斜，进一步降低效率</p>
+</li>
+</ul>
+<blockquote>
+<p><strong>十五、MR实现 MapJoin 的思路，以及MapJoin的局限性是什么？</strong></p>
+</blockquote>
+<ul>
+<li><p>思路：</p>
+<p>首先我们要分析文件之间的关联，然后确定关联字段。在Map阶段，将小文件数据映射到内存中维护起来。在MapTask处理大文件的数据时，每读取一行数据，就根据当前行的关联字段区内存中获取小文件对应的数据。最后再封装结果将其输</p>
+</li>
+<li><p>局限性：</p>
+<p>仅适用于一张表十分小、一张表很大的场景</p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://zhoutttao.com">zhoutttao</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://zhoutttao.com/2022/11/23/Hadoop/%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E9%97%AE%E7%AD%94/2022-11-23-MapReduce%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E9%97%AE%E7%AD%94/">http://zhoutttao.com/2022/11/23/Hadoop/%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E9%97%AE%E7%AD%94/2022-11-23-MapReduce%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E9%97%AE%E7%AD%94/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zhoutttao.com" target="_blank">Abstract Class</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/11/27/Hadoop/%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E9%97%AE%E7%AD%94/2022-11-27-YARN%E9%97%AE%E7%AD%94%E9%A2%98/"><img class="prev-cover" src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">YARN问答题</div></div></a></div><div class="next-post pull-right"><a href="/2022/11/22/Hadoop/2022-11-22-HDFS%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E6%80%BB%E7%BB%93/"><img class="next-cover" src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">HDFS概述</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">zhoutttao</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/zhoutttao" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:zhoutttao@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/12/17/DataX/2022-12-17-DataX%E5%8E%9F%E7%90%86%E7%AE%80%E8%BF%B0%E5%8F%8A%E5%AE%89%E8%A3%85/" title="DataX原理简述及安装"><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="DataX原理简述及安装"/></a><div class="content"><a class="title" href="/2022/12/17/DataX/2022-12-17-DataX%E5%8E%9F%E7%90%86%E7%AE%80%E8%BF%B0%E5%8F%8A%E5%AE%89%E8%A3%85/" title="DataX原理简述及安装">DataX原理简述及安装</a><time datetime="2022-12-16T16:00:00.000Z" title="发表于 2022-12-17 00:00:00">2022-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/17/Kafka/2022-12-17-Kafka%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E9%87%8D%E7%82%B9%E7%9F%A5%E8%AF%86/" title="Kafka基本原理及重点知识"><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Kafka基本原理及重点知识"/></a><div class="content"><a class="title" href="/2022/12/17/Kafka/2022-12-17-Kafka%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E9%87%8D%E7%82%B9%E7%9F%A5%E8%AF%86/" title="Kafka基本原理及重点知识">Kafka基本原理及重点知识</a><time datetime="2022-12-16T16:00:00.000Z" title="发表于 2022-12-17 00:00:00">2022-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/16/Flume/2022-12-16-Flume%E5%8E%9F%E7%90%86%E5%8F%8A%E9%87%8D%E7%82%B9%E7%9F%A5%E8%AF%86/" title="Flume原理及重点知识"><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Flume原理及重点知识"/></a><div class="content"><a class="title" href="/2022/12/16/Flume/2022-12-16-Flume%E5%8E%9F%E7%90%86%E5%8F%8A%E9%87%8D%E7%82%B9%E7%9F%A5%E8%AF%86/" title="Flume原理及重点知识">Flume原理及重点知识</a><time datetime="2022-12-15T16:00:00.000Z" title="发表于 2022-12-16 00:00:00">2022-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/16/Flume/2022-12-16-Flume%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/" title="Flume的安装使用"><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Flume的安装使用"/></a><div class="content"><a class="title" href="/2022/12/16/Flume/2022-12-16-Flume%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/" title="Flume的安装使用">Flume的安装使用</a><time datetime="2022-12-15T16:00:00.000Z" title="发表于 2022-12-16 00:00:00">2022-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/09/Kafka/2022-12-9-Kafka%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/" title="Kafka的安装使用"><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Kafka的安装使用"/></a><div class="content"><a class="title" href="/2022/12/09/Kafka/2022-12-9-Kafka%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/" title="Kafka的安装使用">Kafka的安装使用</a><time datetime="2022-12-08T16:00:00.000Z" title="发表于 2022-12-09 00:00:00">2022-12-09</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By zhoutttao</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'Te29CfyeCurHd4xL1a1l5PmM-MdYXbMMI',
+      appKey: 's4rDZA47Vu52XSQeixeduoWe',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

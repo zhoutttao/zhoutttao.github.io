@@ -1,0 +1,232 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>HDFS问答 | Abstract Class</title><meta name="author" content="zhoutttao"><meta name="copyright" content="zhoutttao"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、描述一下HDFS的数据写入流程   首先，客户端向NN请求上传文件，此时NN检查目录和目录结构，符合要求会响应可以上传。客户端完成文件的切块工作并请求上传第一个Block，NN会按照机架感知规则选择合适的节点，并将节点信息返回客户端。客户端按照距离优先的原则选择一个节点dn1，并请求与其建立连接，dn1收到后会继续请求和dn2请求连接，然后是dn2和dn3，建立串行的通信管道。客户端以Pac">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HDFS问答">
+<meta property="og:url" content="http://zhoutttao.com/2022/11/22/Hadoop/%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E9%97%AE%E7%AD%94/2022-11-22HDFS%E9%97%AE%E7%AD%94%E9%A2%98/index.html">
+<meta property="og:site_name" content="Abstract Class">
+<meta property="og:description" content="一、描述一下HDFS的数据写入流程   首先，客户端向NN请求上传文件，此时NN检查目录和目录结构，符合要求会响应可以上传。客户端完成文件的切块工作并请求上传第一个Block，NN会按照机架感知规则选择合适的节点，并将节点信息返回客户端。客户端按照距离优先的原则选择一个节点dn1，并请求与其建立连接，dn1收到后会继续请求和dn2请求连接，然后是dn2和dn3，建立串行的通信管道。客户端以Pac">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg">
+<meta property="article:published_time" content="2022-11-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-11-28T12:57:57.896Z">
+<meta property="article:author" content="zhoutttao">
+<meta property="article:tag" content="博客">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://zhoutttao.com/2022/11/22/Hadoop/%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E9%97%AE%E7%AD%94/2022-11-22HDFS%E9%97%AE%E7%AD%94%E9%A2%98/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":50},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'HDFS问答',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2022-11-28 20:57:57'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Abstract Class</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">HDFS问答</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-11-21T16:00:00.000Z" title="发表于 2022-11-22 00:00:00">2022-11-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-11-28T12:57:57.896Z" title="更新于 2022-11-28 20:57:57">2022-11-28</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="HDFS问答"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p>一、描述一下HDFS的数据写入流程</p>
+</blockquote>
+<p><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221120151739.png" alt="image-20221120151630875"></p>
+<p>首先，客户端向NN请求上传文件，此时NN检查目录和目录结构，符合要求会响应可以上传。客户端完成文件的切块工作并请求上传第一个Block，NN会按照机架感知规则选择合适的节点，并将节点信息返回客户端。客户端按照距离优先的原则选择一个节点dn1，并请求与其建立连接，dn1收到后会继续请求和dn2请求连接，然后是dn2和dn3，建立串行的通信管道。客户端以Packet为单位发送第一个Block的数据，dn1会一边将数据持久化，一边向dn2发送数据，dn2与dn3同理。当地一个Block处理完毕后，客户端继续向NN请求发送第二个Block，之后重复发送步骤直到文件处理完毕后断开通信。</p>
+<blockquote>
+<p>二、描述一下HDFS的数据读取流程</p>
+</blockquote>
+<p><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221120152000.png" alt="image-20221120151958056"></p>
+<p>客户端向NN请求下载文件，NN查询客户端权限以及该文件的元数据，并将文件的元数据信息返回给客户端。客户端创建FSDataInputStream准备读取文件。客户端选择距离最近的节点读取文件，同时也会考虑节点负载均衡。DN开始以Packet为单位传输数据给客户端，客户端接收数据，先缓存，然后写入目标文件(串行！！！)</p>
+<blockquote>
+<p>三、简述HDFS的架构，其中每个服务的作用</p>
+</blockquote>
+<p><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221120152110.png" alt="image-20221120152104863"></p>
+<ol>
+<li><p>NameNode：👿老大</p>
+<ul>
+<li>管理HDFS名称空间</li>
+<li>配置副本策略</li>
+<li>管理Block的映射信息</li>
+<li>处理客户端的读写请求</li>
+</ul>
+</li>
+<li><p>DateNode：🥵小弟</p>
+<ul>
+<li>负责存储实际的Block</li>
+<li>执行数据的读&#x2F;写操作</li>
+</ul>
+</li>
+<li><p>Client：😅客户端</p>
+<ul>
+<li>进行文件的切块，将需要上传的文件切分成一个一个的Block</li>
+<li>与NN交互，获取文件的位置信息</li>
+<li>与DN交互，读取或者写入文件</li>
+<li>管理HDFS，如格式化NN等</li>
+<li>直接访问HDFS，对HDFS进行一些增删改查操作</li>
+</ul>
+</li>
+<li><p>Secondary NameNode：🤤小秘</p>
+<ul>
+<li>辅助NN工作，如定期合并Fsimage和Edits文件，并发送给NN</li>
+<li>紧急情况下，可以辅助恢复NN</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>四、HDFS中如何实现元数据的维护？</p>
+</blockquote>
+<p>为了兼具那效率和安全性，HDFS将元数据同时存放在内存和磁盘中，在磁盘中维护FsImage文件备份元数据</p>
+<p>为了解决元数据更新时的同步性和效率问题，HDFS使用Edits文件来记录元数据的变化（只进行追加操作，效率很高），当Edits文件追加超过一定数量（100w）或者距离上次合并时间超过一定时长（1小时），就会由2NN将FsImage和Edits文件进行合并。</p>
+<blockquote>
+<p>五、2NN如何对NN的元数据进行合并</p>
+</blockquote>
+<p><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221120152238.png" alt="image-20221120152236436"></p>
+<p>2NN每隔一段时间询问NN是否需要CheckPoint（一小时或者Edits文件数量达到一百万条时）。2NN请求执行CheckPoint，NN会滚动正在写的Edits（将edits_inprogress_xxx复制一份改名为edits_xxx，并生成新的edits_inprogress_xxx）。2NN将FsImage和edits拷贝过来，并加载到内存进行合并，生成新的fsimage_chkpoint，拷贝回NN，NN将fsimage_chkpoint改名回fsimage并覆盖原来的fsimage</p>
+<blockquote>
+<p>六、描述一下NN和DN的关系，以及DN的工作流程</p>
+</blockquote>
+<p><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221120152343.png" alt="image-20221120152340775"></p>
+<p>NN和DN关系和Boss和小弟的关系很像，一个NN管理着多个DN，DN听从NN的指挥。</p>
+<p>DN存储实际的数据块，此外还存储着meta文件保存块的长度、校验和、时间戳信息。服务器开机，DN先向NN注册，NN记录DN的信息并返回注册成功。之后每个周期（默认6小时）DN会再次向NN上报所有信息。DN每三秒心跳一次告诉NN还活着，心跳返回带有NN给DN的命令，如果超过十分钟30秒NN没有收到心跳，NN会认为该节点不可用了。</p>
+<p>🥵🤤🤡😄😅😭😰🥰😝😩😮‍💨👿😡❤️🔥👀👉💯💔</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://zhoutttao.com">zhoutttao</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://zhoutttao.com/2022/11/22/Hadoop/%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E9%97%AE%E7%AD%94/2022-11-22HDFS%E9%97%AE%E7%AD%94%E9%A2%98/">http://zhoutttao.com/2022/11/22/Hadoop/%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E9%97%AE%E7%AD%94/2022-11-22HDFS%E9%97%AE%E7%AD%94%E9%A2%98/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zhoutttao.com" target="_blank">Abstract Class</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2022/11/22/Hadoop/2022-11-22-HDFS%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E6%80%BB%E7%BB%93/"><img class="prev-cover" src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">HDFS概述</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">zhoutttao</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/zhoutttao" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:zhoutttao@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/12/17/DataX/2022-12-17-DataX%E5%8E%9F%E7%90%86%E7%AE%80%E8%BF%B0%E5%8F%8A%E5%AE%89%E8%A3%85/" title="DataX原理简述及安装"><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="DataX原理简述及安装"/></a><div class="content"><a class="title" href="/2022/12/17/DataX/2022-12-17-DataX%E5%8E%9F%E7%90%86%E7%AE%80%E8%BF%B0%E5%8F%8A%E5%AE%89%E8%A3%85/" title="DataX原理简述及安装">DataX原理简述及安装</a><time datetime="2022-12-16T16:00:00.000Z" title="发表于 2022-12-17 00:00:00">2022-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/17/Kafka/2022-12-17-Kafka%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E9%87%8D%E7%82%B9%E7%9F%A5%E8%AF%86/" title="Kafka基本原理及重点知识"><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Kafka基本原理及重点知识"/></a><div class="content"><a class="title" href="/2022/12/17/Kafka/2022-12-17-Kafka%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E9%87%8D%E7%82%B9%E7%9F%A5%E8%AF%86/" title="Kafka基本原理及重点知识">Kafka基本原理及重点知识</a><time datetime="2022-12-16T16:00:00.000Z" title="发表于 2022-12-17 00:00:00">2022-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/16/Flume/2022-12-16-Flume%E5%8E%9F%E7%90%86%E5%8F%8A%E9%87%8D%E7%82%B9%E7%9F%A5%E8%AF%86/" title="Flume原理及重点知识"><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Flume原理及重点知识"/></a><div class="content"><a class="title" href="/2022/12/16/Flume/2022-12-16-Flume%E5%8E%9F%E7%90%86%E5%8F%8A%E9%87%8D%E7%82%B9%E7%9F%A5%E8%AF%86/" title="Flume原理及重点知识">Flume原理及重点知识</a><time datetime="2022-12-15T16:00:00.000Z" title="发表于 2022-12-16 00:00:00">2022-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/16/Flume/2022-12-16-Flume%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/" title="Flume的安装使用"><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Flume的安装使用"/></a><div class="content"><a class="title" href="/2022/12/16/Flume/2022-12-16-Flume%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/" title="Flume的安装使用">Flume的安装使用</a><time datetime="2022-12-15T16:00:00.000Z" title="发表于 2022-12-16 00:00:00">2022-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/09/Kafka/2022-12-9-Kafka%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/" title="Kafka的安装使用"><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Kafka的安装使用"/></a><div class="content"><a class="title" href="/2022/12/09/Kafka/2022-12-9-Kafka%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/" title="Kafka的安装使用">Kafka的安装使用</a><time datetime="2022-12-08T16:00:00.000Z" title="发表于 2022-12-09 00:00:00">2022-12-09</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By zhoutttao</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'Te29CfyeCurHd4xL1a1l5PmM-MdYXbMMI',
+      appKey: 's4rDZA47Vu52XSQeixeduoWe',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

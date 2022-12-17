@@ -1,0 +1,198 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Flume的安装使用 | Abstract Class</title><meta name="author" content="zhoutttao"><meta name="copyright" content="zhoutttao"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="安装部署安装地址 Flume官网地址：http:&#x2F;&#x2F;flume.apache.org&#x2F;  文档查看地址：http:&#x2F;&#x2F;flume.apache.org&#x2F;FlumeUserGuide.html  下载地址：http:&#x2F;&#x2F;archive.apache.org&#x2F;dist&#x2F;flume&#x2F;   安装部署 将apache-flume-1.9.0-bin.tar.gz上传到linux的&#x2F;opt&amp;#x2F">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flume的安装使用">
+<meta property="og:url" content="http://zhoutttao.com/2022/12/16/Flume/2022-12-16-Flume%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Abstract Class">
+<meta property="og:description" content="安装部署安装地址 Flume官网地址：http:&#x2F;&#x2F;flume.apache.org&#x2F;  文档查看地址：http:&#x2F;&#x2F;flume.apache.org&#x2F;FlumeUserGuide.html  下载地址：http:&#x2F;&#x2F;archive.apache.org&#x2F;dist&#x2F;flume&#x2F;   安装部署 将apache-flume-1.9.0-bin.tar.gz上传到linux的&#x2F;opt&amp;#x2F">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg">
+<meta property="article:published_time" content="2022-12-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-12-16T12:12:01.367Z">
+<meta property="article:author" content="zhoutttao">
+<meta property="article:tag" content="博客">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://zhoutttao.com/2022/12/16/Flume/2022-12-16-Flume%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":50},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Flume的安装使用',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-12-16 20:12:01'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Abstract Class</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Flume的安装使用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-12-15T16:00:00.000Z" title="发表于 2022-12-16 00:00:00">2022-12-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-12-16T12:12:01.367Z" title="更新于 2022-12-16 20:12:01">2022-12-16</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Flume的安装使用"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="安装部署"><a href="#安装部署" class="headerlink" title="安装部署"></a>安装部署</h1><h2 id="安装地址"><a href="#安装地址" class="headerlink" title="安装地址"></a>安装地址</h2><ul>
+<li><p>Flume官网地址：<a target="_blank" rel="noopener" href="http://flume.apache.org/">http://flume.apache.org/</a></p>
+</li>
+<li><p>文档查看地址：<a target="_blank" rel="noopener" href="http://flume.apache.org/FlumeUserGuide.html">http://flume.apache.org/FlumeUserGuide.html</a></p>
+</li>
+<li><p>下载地址：<a target="_blank" rel="noopener" href="http://archive.apache.org/dist/flume/">http://archive.apache.org/dist/flume/</a></p>
+</li>
+</ul>
+<h2 id="安装部署-1"><a href="#安装部署-1" class="headerlink" title="安装部署"></a>安装部署</h2><ol>
+<li><p>将apache-flume-1.9.0-bin.tar.gz上传到linux的&#x2F;opt&#x2F;software目录下</p>
+</li>
+<li><p>解压apache-flume-1.9.0-bin.tar.gz到&#x2F;opt&#x2F;module&#x2F;目录下</p>
+</li>
+</ol>
+<p><code>[atguigu@hadoop102 software]$ tar -zxvf /opt/software/apache-flume-1.9.0-bin.tar.gz -C /opt/module/</code></p>
+<ol start="3">
+<li>修改apache-flume-1.9.0-bin的名称为flume</li>
+</ol>
+<p><code>[atguigu@hadoop102 module]$ mv /opt/module/apache-flume-1.9.0-bin /opt/module/flume</code></p>
+<ol start="4">
+<li>将lib文件夹下的guava-11.0.2.jar删除以兼容Hadoop 3.1.3</li>
+</ol>
+<p><code>[atguigu@hadoop102 lib]$ rm /opt/module/flume/lib/guava-11.0.2.jar</code></p>
+<ol start="5">
+<li>修改conf下的log4j.properties确定日志打印的位置</li>
+</ol>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#console表示同时将日志输出到控制台</span></span><br><span class="line"><span class="attr">flume.root.logger</span>=<span class="string">INFO,LOGFILE,console</span></span><br><span class="line"><span class="comment">#固定日志输出的位置</span></span><br><span class="line"><span class="attr">flume.log.dir</span>=<span class="string">/opt/module/flume/logs</span></span><br><span class="line"><span class="comment">#日志文件的名称</span></span><br><span class="line"><span class="attr">flume.log.file</span>=<span class="string">flume.log</span></span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://zhoutttao.com">zhoutttao</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://zhoutttao.com/2022/12/16/Flume/2022-12-16-Flume%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/">http://zhoutttao.com/2022/12/16/Flume/2022-12-16-Flume%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zhoutttao.com" target="_blank">Abstract Class</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/12/16/Flume/2022-12-16-Flume%E5%8E%9F%E7%90%86%E5%8F%8A%E9%87%8D%E7%82%B9%E7%9F%A5%E8%AF%86/"><img class="prev-cover" src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Flume原理及重点知识</div></div></a></div><div class="next-post pull-right"><a href="/2022/12/09/Kafka/2022-12-9-Kafka%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/"><img class="next-cover" src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Kafka的安装使用</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">zhoutttao</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/zhoutttao" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:zhoutttao@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2"><span class="toc-number">1.</span> <span class="toc-text">安装部署</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%9C%B0%E5%9D%80"><span class="toc-number">1.1.</span> <span class="toc-text">安装地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2-1"><span class="toc-number">1.2.</span> <span class="toc-text">安装部署</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/12/17/DataX/2022-12-17-DataX%E5%8E%9F%E7%90%86%E7%AE%80%E8%BF%B0%E5%8F%8A%E5%AE%89%E8%A3%85/" title="DataX原理简述及安装"><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="DataX原理简述及安装"/></a><div class="content"><a class="title" href="/2022/12/17/DataX/2022-12-17-DataX%E5%8E%9F%E7%90%86%E7%AE%80%E8%BF%B0%E5%8F%8A%E5%AE%89%E8%A3%85/" title="DataX原理简述及安装">DataX原理简述及安装</a><time datetime="2022-12-16T16:00:00.000Z" title="发表于 2022-12-17 00:00:00">2022-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/17/Kafka/2022-12-17-Kafka%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E9%87%8D%E7%82%B9%E7%9F%A5%E8%AF%86/" title="Kafka基本原理及重点知识"><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Kafka基本原理及重点知识"/></a><div class="content"><a class="title" href="/2022/12/17/Kafka/2022-12-17-Kafka%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%8F%8A%E9%87%8D%E7%82%B9%E7%9F%A5%E8%AF%86/" title="Kafka基本原理及重点知识">Kafka基本原理及重点知识</a><time datetime="2022-12-16T16:00:00.000Z" title="发表于 2022-12-17 00:00:00">2022-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/16/Flume/2022-12-16-Flume%E5%8E%9F%E7%90%86%E5%8F%8A%E9%87%8D%E7%82%B9%E7%9F%A5%E8%AF%86/" title="Flume原理及重点知识"><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Flume原理及重点知识"/></a><div class="content"><a class="title" href="/2022/12/16/Flume/2022-12-16-Flume%E5%8E%9F%E7%90%86%E5%8F%8A%E9%87%8D%E7%82%B9%E7%9F%A5%E8%AF%86/" title="Flume原理及重点知识">Flume原理及重点知识</a><time datetime="2022-12-15T16:00:00.000Z" title="发表于 2022-12-16 00:00:00">2022-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/16/Flume/2022-12-16-Flume%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/" title="Flume的安装使用"><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Flume的安装使用"/></a><div class="content"><a class="title" href="/2022/12/16/Flume/2022-12-16-Flume%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/" title="Flume的安装使用">Flume的安装使用</a><time datetime="2022-12-15T16:00:00.000Z" title="发表于 2022-12-16 00:00:00">2022-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/09/Kafka/2022-12-9-Kafka%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/" title="Kafka的安装使用"><img src="https://zhoutttao.oss-cn-beijing.aliyuncs.com/image/20221118182857.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Kafka的安装使用"/></a><div class="content"><a class="title" href="/2022/12/09/Kafka/2022-12-9-Kafka%E7%9A%84%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8/" title="Kafka的安装使用">Kafka的安装使用</a><time datetime="2022-12-08T16:00:00.000Z" title="发表于 2022-12-09 00:00:00">2022-12-09</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By zhoutttao</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'Te29CfyeCurHd4xL1a1l5PmM-MdYXbMMI',
+      appKey: 's4rDZA47Vu52XSQeixeduoWe',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
